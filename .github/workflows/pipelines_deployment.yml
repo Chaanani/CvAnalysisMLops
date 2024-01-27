@@ -13,7 +13,30 @@ on:
       - feature-*
 
 jobs:
+  test-unit-model: 
+    runs-on : ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version : ["3.9"]
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+            python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: |
+           pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          python -m unittest
+      
   build-and-push:
+    needs : test-unit-model
     runs-on: ubuntu-latest
     strategy :
       matrix:
