@@ -47,7 +47,7 @@ jobs:
 
       
   build-and-push:
-    # needs : test-unit-model
+    needs : test-unit-model
     runs-on: ubuntu-latest
     strategy :
       matrix:
