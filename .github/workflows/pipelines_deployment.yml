@@ -34,9 +34,20 @@ jobs:
       - name: Run Tests
         run: |
           python -m unittest
+          echo $? > test_result.txt
+        
+      - name: Upload Test Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-result
+          path: test_result.txt
+      
+
+
+
       
   build-and-push:
-    needs : test-unit-model
+    # needs : test-unit-model
     runs-on: ubuntu-latest
     strategy :
       matrix:
@@ -44,6 +55,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+
+    - name: Download Test Result
+      uses: actions/download-artifact@v2
+      with:
+          name: test-result
+
+    - name: Verify Test Success
+      run: |
+          if grep -q 1 test_result.txt; then
+            echo "Tests failed, stopping build."
+            exit 1
+          fi
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
