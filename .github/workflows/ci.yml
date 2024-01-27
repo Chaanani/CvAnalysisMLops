@@ -1,4 +1,5 @@
 name: CI/CD Pipeline
+
 on:
   push:
     branches: 
@@ -11,19 +12,13 @@ on:
       - develop
       - feature-*
 
-
-
-
 jobs:
-
-  
   build-and-push:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.modified, 'ci.yml')
     strategy :
       matrix:
-        python-version : ['3.7','3.8','3.9']
-
+        python-version : ['3.6', '3.7', '3.8', '3.9']
     steps:
     - uses: actions/checkout@v2
     - run: echo "ci.yml a été modifié."
@@ -37,16 +32,12 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Build and push
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-      run : | 
-        docker build --build-arg PYTHON_VERSION=${{ matrix.python-version }} -t chaanani/mycv:${{ matrix.python-version }} .
-        docker push chaanani/mycv:${{ matrix.python-version }}
-           
-
-
-
-
-    
+      if: github.ref=='refs/heads/main' || github.ref == 'refs/heads/develop'
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: chaanani/mycv:latest
 
   
         
