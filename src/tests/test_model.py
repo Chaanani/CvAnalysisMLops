@@ -59,7 +59,7 @@ class TestVotreModele(unittest.TestCase):
         performance = accuracy_score(label_test, perdict_label)
 
         print(performance)
-        self.assertGreater(performance, 2, "La performance du modèle est inférieure au seuil acceptable.")
+        self.assertGreater(performance, 0.5, "La performance du modèle est inférieure au seuil acceptable.")
 
 if __name__ == '__main__':
     unittest.main()
