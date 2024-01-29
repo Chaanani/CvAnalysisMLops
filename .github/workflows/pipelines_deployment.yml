@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          python -m unittest src/tests
+          python -m unittest 
           echo $? > test_result.txt
         
       - name: Upload Test Result
