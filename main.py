@@ -6,7 +6,7 @@ import pickle
 import re
 
 
-st.title('Prédiction Résume ')
+st.title('CV  ')
 
 
 
