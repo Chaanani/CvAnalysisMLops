@@ -116,7 +116,7 @@ jobs:
 
       - name: Deploy to KinD
         run: |
-          kubectl apply -f deployment.yaml # Assurez-vous que ce fichier est dans votre repo
+          kubectl apply -f k8s/deployment.yaml 
 
       - name: Run Integration Tests
         run: |
@@ -126,7 +126,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          kubectl delete -f deployment.yaml
+          kubectl delete -f k8s/deployment.yaml
 
   
         
