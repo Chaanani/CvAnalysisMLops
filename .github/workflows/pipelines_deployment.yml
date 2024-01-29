@@ -84,5 +84,49 @@ jobs:
         docker build --build-arg PYTHON_VERSION=${{ matrix.python-version }} -t chaanani/mycv:${{ matrix.python-version }} .
         docker push chaanani/mycv:${{ matrix.python-version }}
 
+
+
+
+  deploy-with-kind:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    strategy :
+      matrix:
+        python-version : ['3.9']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup KinD Cluster
+        uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.11.1" 
+          
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+
+      - name: Load Docker Image into KinD
+        run: |
+          kind load docker-image chaanani/mycv:${{ matrix.python-version }}
+
+      - name: Deploy to KinD
+        run: |
+          kubectl apply -f deployment.yaml # Assurez-vous que ce fichier est dans votre repo
+
+      - name: Run Integration Tests
+        run: |
+          # Ici, vous pouvez exécuter des tests d'intégration ou de vérification
+          kubectl get pods
+
+      - name: Cleanup
+        if: always()
+        run: |
+          kubectl delete -f deployment.yaml
+
   
         
