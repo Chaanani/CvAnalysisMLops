@@ -85,6 +85,7 @@ jobs:
         docker build --build-arg PYTHON_VERSION=${{ matrix.python-version }} -t chaanani/mycv:${{ matrix.python-version }} .
         docker push chaanani/mycv:${{ matrix.python-version }}
 
+        
     - name: Setup KinD Cluster
       uses: engineerd/setup-kind@v0.5.0  
 
