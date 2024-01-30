@@ -97,36 +97,41 @@ jobs:
 
 
 
-  deploy-with-kind:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    strategy :
-      matrix:
-        python-version : ['3.9']
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x ./kubectl
-          sudo mv ./kubectl /usr/local/bin/kubectl
-          
-      - name: Deploy to KinD
-        run: |
-          kubectl apply -f k8s/deployment.yaml 
-
-      - name: Run Integration Tests
-        run: |
-          # Ici, vous pouvez exécuter des tests d'intégration ou de vérification
-          kubectl get pods
-
-      - name: Cleanup
-        if: always()
-        run: |
-          kubectl delete -f k8s/deployment.yaml
+  deploy-and-test:
+        needs: build-and-push
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            python-version: ['3.9']
+        steps:
+          - uses: actions/checkout@v2
+          - name: Login to Docker Hub
+            uses: docker/login-action@v1
+            with:
+              username: ${{ secrets.DOCKER_HUB_USERNAME }}
+              password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          - name: Setup KinD Cluster
+            uses: engineerd/setup-kind@v0.5.0
+            with:
+              version: "v0.11.1"
+          - name: Pull Docker Image from Registry
+            run: docker pull chaanani/mycv:${{ matrix.python-version }}
+          - name: Load Docker Image into KinD
+            run: kind load docker-image chaanani/mycv:${{ matrix.python-version }}
+          - name: Install kubectl
+            run: |
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin/kubectl
+          - name: Deploy to KinD
+            run: kubectl apply -f k8s/deployment.yaml 
+          - name: Run Integration Tests
+            run: |
+              kubectl wait --for=condition=ready pod -l app=my-python-app --timeout=180s
+              # Ajoutez ici les commandes spécifiques à vos tests d'intégration
+          - name: Cleanup KinD Cluster
+            if: always()
+            run: kind delete cluster
 
   
         
