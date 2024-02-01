@@ -3,18 +3,9 @@ import pandas as pd
 
 engine = create_engine('postgresql+psycopg2://postgres:pass@localhost/test')
  
-
-
-
-def récupere_table():
+def extract_table():
      
     query = "SELECT * FROM CV"
     df = pd.read_sql_query(query, engine)
+    df.to_csv('../src/datasets/UpdatedResumeDataSet.csv', index=False)
     engine.dispose()
-
-    return df
-
-
-df = récupere_table()
-
-df.to_csv('../src/datasets/UpdatedResumeDataSet.csv', index=False)
