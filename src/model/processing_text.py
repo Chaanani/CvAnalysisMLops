@@ -74,7 +74,7 @@ def model_kpp(X_train, y_train):
 
 if __name__=='__main__':
 
-    Data = pd.read_csv('../datasets//UpdatedResumeDataSet.csv' ,encoding='utf-8')
+    Data = pd.read_csv('../datasets/UpdatedResumeDataSet.csv' ,encoding='utf-8')
     Data = cleaned_resume(Data)
     Data = label_coding(Data)
     X_train, y_train = toknizer_text(Data)
