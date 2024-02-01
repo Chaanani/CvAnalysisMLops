@@ -1,16 +1,22 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date
+import pandas as pd
 
-# Configuration de la connexion à la base de données
 engine = create_engine('postgresql+psycopg2://postgres:pass@localhost/test')
-metadata = MetaData()
+ 
 
-# Définition de la table 'personne'
-personne = Table('Use', metadata,
-                 Column('id', Integer, primary_key=True),
-                 Column('prenom', String(50)),
-                 Column('nom', String(50)),
-                 Column('date_naissance', Date)
-                 )
 
-# Création de la table dans la base de données
-metadata.create_all(engine)
+def storge_table():
+     
+    Data = pd.read_csv('../src/datasets/UpdatedResumeDataSet.csv' ,encoding='utf-8')
+    Data.to_sql('CV', engine, index=False, if_exists='replace')  
+    engine.dispose()
+    
+
+
+def récupere_table():
+     
+    query = "SELECT * FROM CV"
+    df = pd.read_sql_query(query, engine)
+    engine.dispose()
+
+    return df
