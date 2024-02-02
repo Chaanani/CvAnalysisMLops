@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date
 import pandas as pd
 
-engine = create_engine('postgresql+psycopg2://postgres:pass@localhost/test')
- 
 
+ 
+engine = create_engine('postgresql+psycopg2://postgres:pass@localhost/test')
 
 def storge_table():
      
