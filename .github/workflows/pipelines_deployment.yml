@@ -13,6 +13,7 @@ on:
       - feature-*
 
 jobs:
+  # Test our model 
   test-unit-model: 
     runs-on : ubuntu-latest
 
@@ -41,7 +42,7 @@ jobs:
 
 
 
-      
+  # build and push our image docker in docker  
   build-and-push:
     needs : test-unit-model
     runs-on: ubuntu-latest
@@ -81,7 +82,7 @@ jobs:
 
 
 
-
+  # Cette script responsables sur l'excécution de l'image docker sur un cluster kubernetes
   deploy-and-test:
         needs: build-and-push
         runs-on: ubuntu-latest
@@ -108,7 +109,7 @@ jobs:
 
           - name: Load Docker Image into KinD
             run: kind load docker-image chaanani/mycv:${{ matrix.python-version }}
-            
+
           - name: Install kubectl
             run: |
               curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -119,7 +120,7 @@ jobs:
           - name: Run Integration Tests
             run: |
               kubectl wait --for=condition=ready pod -l app=my-python-app --timeout=180s
-              # Ajoutez ici les commandes spécifiques à vos tests d'intégration
+              
           - name: Cleanup KinD Cluster
             if: always()
             run: kind delete cluster
