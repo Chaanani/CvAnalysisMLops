@@ -1,3 +1,4 @@
 .github/worhflows/pipelines_test.yml
 docker-compose.yml
 logs/
+post-depl.sh

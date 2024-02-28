@@ -1,0 +1,13 @@
+# my-python-app-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-python-app-service
+spec:
+  type: NodePort
+  selector:
+    app: my-python-app
+  ports:
+  - protocol: TCP
+    port: 8501
+    targetPort: 8501

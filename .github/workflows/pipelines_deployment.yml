@@ -116,7 +116,9 @@ jobs:
               chmod +x ./kubectl
               sudo mv ./kubectl /usr/local/bin/kubectl
           - name: Deploy to KinD
-            run: kubectl apply -f k8s/deployment.yaml 
+            run: |
+              kubectl apply -f k8s/deployment.yaml 
+              kubectl apply -f k8s/my-python-app-service.yaml
           - name: Run Integration Tests
             run: |
               kubectl wait --for=condition=ready pod -l app=my-python-app --timeout=180s
