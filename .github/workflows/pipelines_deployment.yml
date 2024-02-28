@@ -107,7 +107,7 @@ jobs:
           - name: Pull Docker Image from Registry
             run: docker pull chaanani/mycv:${{ matrix.python-version }}
 
-          - name: Load Docker Image into KinD
+          - name: Load  Docker Image into KinD
             run: kind load docker-image chaanani/mycv:${{ matrix.python-version }}
 
           - name: Install kubectl
