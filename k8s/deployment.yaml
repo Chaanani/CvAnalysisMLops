@@ -29,18 +29,7 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8501
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8501
-          initialDelaySeconds: 5
-          periodSeconds: 10     
+          
   strategy:
     type: RollingUpdate
     rollingUpdate:
