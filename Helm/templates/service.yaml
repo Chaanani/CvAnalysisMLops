@@ -7,10 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    protocol: TCP
+  - protocol: TCP
     port: {{ .Values.service.port }}
-    targetPort: 80
-
+    targetPort: {{ .Values.service.targetPort }}
   selector:
     app: my-python-app
 
