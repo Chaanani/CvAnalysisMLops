@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app
+  labels:
+    app: my-python-app
+    environment: production
+  annotations:
+    maintainer: "youness.chaanani7@gmail.com"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: my-python-app
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+    spec:
+      containers:
+      - name: my-python-app
+        image: {{ .Values.image.repository }}: {{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+        resources:
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
+            cpu: {{ .Values.resources.requests.cpu }}
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+            cpu: {{ .Values.resources.limits.cpu }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
