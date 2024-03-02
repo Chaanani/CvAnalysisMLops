@@ -5,7 +5,7 @@ metadata:
   labels:
     app: my-python-app
 spec:
-  type: NodePort
+  type: {{ .Values.service.type }}
   ports:
   - protocol: TCP
     port: {{ .Values.service.port }}

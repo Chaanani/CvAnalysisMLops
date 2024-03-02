@@ -90,7 +90,7 @@ jobs:
         
               - name: Deploy to KinD using Helm
                 run: |
-                  helm upgrade --install my-python-app ./Helm \
+                  helm upgrade --install my-python-app ./Helm_kubernetes \
                     --set image.repository=chaanani/mycv \
                     --set image.tag=${{ matrix.python-version }} \
                     --namespace default --create-namespace \
