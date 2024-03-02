@@ -63,7 +63,7 @@ jobs:
        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
     
     - name: Build and push
-      if: github.ref=='refs/heads/main' || github.ref == 'refs/heads/develop'
+      if: github.ref=='refs/heads/main' || github.ref == 'refs/heads/dev'
 
       run: |
         docker build --build-arg PYTHON_VERSION=${{ matrix.python-version }} -t chaanani/mycv:${{ matrix.python-version }} .
