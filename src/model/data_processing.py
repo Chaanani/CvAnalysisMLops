@@ -33,7 +33,6 @@ def cleanResume(resumeText):
     return resumeText
 
 def cleaned_resume(Data):
-
     Data['cleaned_resume'] = Data.Resume.apply(lambda x: cleanResume(x))
     return Data
 
