@@ -36,6 +36,3 @@ def train_model():
     with open('../pickle/model.pkl', 'wb') as fichier:
          pickle.dump(clf, fichier)
 
-
-
-

@@ -63,6 +63,9 @@ def toknizer_text(Data):
     return X_train, y_train
 
 
+
+
+
 def model_kpp(X_train, y_train):
     clf = OneVsRestClassifier(KNeighborsClassifier())
     clf.fit(X_train, y_train)
@@ -70,7 +73,7 @@ def model_kpp(X_train, y_train):
     with open('../pickle/model.pkl', 'wb') as fichier:
          pickle.dump(clf, fichier)
 
-
+    return X_train, y_train
 
 
 

@@ -1,0 +1,38 @@
+version: '3'
+services:
+  webserver:
+    image: apache/airflow:2.3.0
+    restart: always
+    depends_on:
+      - scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:pass@host.docker.internal/test
+      - AIRFLOW__CORE__FERNET_KEY=81HqDtbqAywKSOumSha3BhWNOdQ26slT6K0YaZeZyPs=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_UID=${AIRFLOW_UID:-50000}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./automation/dags:/opt/airflow/dags
+      - ./srv/dev:/opt/airflow/srv/dev  
+    command: webserver
+
+  scheduler:
+    image: apache/airflow:2.3.0
+    restart: always
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:pass@host.docker.internal/test
+      - AIRFLOW__CORE__FERNET_KEY=81HqDtbqAywKSOumSha3BhWNOdQ26slT6K0YaZeZyPs=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_UID=${AIRFLOW_UID:-50000}
+    volumes:
+      - ./automation/dags:/opt/airflow/dags
+      - ./srv/dev:/opt/airflow/srv/dev
+    command: scheduler
+volumes:
+  postgres_data:
+  dags:
+  logs:
+  plugins:
